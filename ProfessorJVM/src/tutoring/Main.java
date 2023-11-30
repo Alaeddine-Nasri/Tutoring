@@ -4,6 +4,8 @@ import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.EnumSet;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
@@ -74,6 +76,20 @@ public class Main  extends Application{
 	                    EnumSet<Modules> modules = EnumSet.of(selectedModule);
 	                    prof = professorList.addProf(tutorName + " " + familyName, modules);
 	                    System.out.println("Prof " + prof.getName() + " with id  " + prof.getUUID() + " is registered." + "sessions" + prof.getSessions());
+	                    boolean sessionCreated = prof.createSession(Modules.Algorithmic,Level.BEGINNER,1,LocalTime.of(9, 0),LocalTime.of(9, 0),LocalDate.of(2023, 12, 1),20,Currency.EUR);
+                  	  		if (sessionCreated) {
+                  	  			System.out.println("Session Created");
+                  	  			// or notify the user that the session was added successfully
+                  	  		} else {
+                  	  			System.out.println("Session Error");
+                  	  		}
+                  	  	boolean sessionCreated2 = prof.createSession(Modules.Mathemathics,Level.INTERMEDIATE,1,LocalTime.of(9, 0),LocalTime.of(9, 0),LocalDate.of(2023, 12, 1),30,Currency.EUR);
+              	  		if (sessionCreated2) {
+              	  			System.out.println("Session 2 Created");
+              	  			// or notify the user that the session was added successfully
+              	  		} else {
+              	  			System.out.println("Session Error");
+              	  		}
 	                } catch (MalformedURLException ee) {
 	                    ee.printStackTrace();
 	                } catch (Exception ee) {

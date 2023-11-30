@@ -20,7 +20,7 @@
     -fx-background-position: center;
     -fx-pref-width: 40;
     -fx-pref-height: 40;
-    -fx-padding: 0 10 0 0;
+    -fx-padding: 20 10 20 0;
    /* -fx-background-radius: 50; */
 }
 .titles{
@@ -106,9 +106,40 @@
     -fx-text-fill: white;
 }
 
-
-
 .button:hover {
     -fx-effect: dropshadow(gaussian, #000, 10, 0, 0, 0);
 }
 
+.sessionCard{
+	-fx-background-color: white;
+	-fx-pref-width: 250;
+	-fx-pref-height: 170;
+	-fx-background-radius: 10 10 10 10;
+	-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 10, 0, 0, 0);
+}
+.sessionCard:hover{
+	-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 20, 0, 0, 0);
+}
+.moduleColor{
+	-fx-background-image: url('assets/photos/Math.png');
+   /*  -fx-background-color: #FFF000;*/
+    /* Preserve the aspect ratio of the background image */
+      -fx-background-size: cover;
+    -fx-background-position: center;
+	-fx-pref-width: 250;
+	-fx-pref-height: 110;
+	-fx-background-radius: 10 10 0 0;
+}
+.sessionInfo{
+	-fx-padding: 5 5 5 5;
+}
+.addSessionCard{
+	-fx-background-color: #041444;
+	-fx-pref-width: 250;
+	-fx-pref-height: 170;
+	-fx-background-radius: 10 10 10 10;
+	-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 10, 0, 0, 0);
+}
+.addSessionCard:hover{
+	-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 20, 0, 0, 0);
+}
