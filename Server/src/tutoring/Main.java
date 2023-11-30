@@ -14,6 +14,8 @@ public class Main {
 			LocateRegistry.createRegistry(1101);
 			ProfessorList list = new ProfessorList();
 			Naming.rebind("rmi://127.0.0.1:1101/professor_list", list);
+			StudentList list2 = new StudentList();
+			Naming.rebind("rmi://127.0.0.1:1101/student_list", list2);
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
