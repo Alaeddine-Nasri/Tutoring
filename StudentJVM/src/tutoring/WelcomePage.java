@@ -155,37 +155,39 @@ public class WelcomePage extends VBox {
                     
                     
                     Button joinSessionButton = new Button();
+                    joinSessionButton.getStyleClass().add("button-needs");
                     try {
                         List<IStudent> sessionStudents = session.getStudents();
                         boolean isStudentInSession = sessionStudents.contains(student);
 
-                        if (isStudentInSession) {
-                            joinSessionButton.setText("Unjoin");
-                            joinSessionButton.getStyleClass().add("button-Unjoin");
-                            joinSessionButton.getStyleClass().add("button-unjoin");
-                        } else {
-                            joinSessionButton.setText("Join");
-                            joinSessionButton.getStyleClass().add("button-join");
-                        }
-
+                        updateButtonAppearance(joinSessionButton, isStudentInSession);
+                        joinSessionButton.getStyleClass().add("button-needs");
                         joinSessionButton.setOnAction(e -> {
                             try {
-                                if (isStudentInSession) {
+                                List<IStudent> updatedSessionStudents = session.getStudents();
+                                boolean updatedIsStudentInSession = updatedSessionStudents.contains(student);
+
+                                if (updatedIsStudentInSession) {
                                     String result = session.deleteRegistredStudent(student);
                                     System.out.println("Unjoining session: " + session.toString() + "\nResult: " + result);
-                                    joinSessionButton.setText("Join");
                                 } else {
                                     String result = session.addStudent(student);
                                     System.out.println("Joining session: " + session.toString() + "\nResult: " + result);
-                                    joinSessionButton.setText("Unjoin");
                                 }
+
+                                // Update button appearance after the action
+                                updateButtonAppearance(joinSessionButton, !updatedIsStudentInSession);
+                                joinSessionButton.getStyleClass().add("button-needs");
+
                             } catch (Exception ex) {
                                 ex.printStackTrace();
                             }
                         });
+
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
+
                     
                     sessionJoin.getChildren().addAll(sessionJoinLabel,spacer,joinSessionButton);
                     redBox.getChildren().addAll(moduleColor,sessionInfo,sessionInfo2,sessionJoin);
@@ -270,6 +272,19 @@ public class WelcomePage extends VBox {
         });
 
         return menuItem;
+    }
+    
+ // Method to update the button appearance based on the session status
+    private void updateButtonAppearance(Button button, boolean isStudentInSession) {
+        if (isStudentInSession) {
+            button.setText("Unjoin");
+            button.getStyleClass().clear();
+            button.getStyleClass().addAll("button-needs","button-unjoin");
+        } else {
+            button.setText("Join");
+            button.getStyleClass().clear();
+            button.getStyleClass().addAll("button-needs","button-join");
+        }
     }
 
 

@@ -93,16 +93,15 @@ public class Session extends UnicastRemoteObject implements ISession{
 			return "There has been some error";		
 		}
 	}
-
-
-
 	
 	public String deleteRegistredStudent(IStudent student) throws RemoteException {
 		boolean ack = this.students.remove(student);
 		if (ack) {
+			if(waitList!=null) {
 			IStudent firstWaitList = this.waitList.get(0);
 			firstWaitList.notifyStudent(this);
 			this.waitList.remove(0);
+			}
 			return "You have successfully unregistred for the session.";
 		} else {
 			return "There has been some error";

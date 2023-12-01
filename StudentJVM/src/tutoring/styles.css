@@ -61,21 +61,20 @@
     -fx-pref-height: 40;
     -fx-font-weight: bold;
 }
-.button-join {
-    -fx-background-color: #041444;
-    -fx-text-fill: white;
+.button-needs{
+	-fx-text-fill: white;
     -fx-font-size: 14px;
     -fx-pref-width: 80;
     -fx-pref-height: 30;
     -fx-font-weight: bold;
+    
+}
+.button-join {
+    -fx-background-color: #041444;
+
 }
 .button-unjoin	 {
     -fx-background-color: red;
-    -fx-text-fill: white;
-    -fx-font-size: 14px;
-    -fx-pref-width: 80;
-    -fx-pref-height: 30;
-    -fx-font-weight: bold;
 }
 /* Define styles for ComboBox */
 .combo-box {
