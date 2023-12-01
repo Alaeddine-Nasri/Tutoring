@@ -66,13 +66,9 @@ public class Main extends Application {
 	        submitButton.setOnAction(e -> {
 	            String studentName = studentNameTextField.getText();
 	            String familyName = familyTextField.getText();
-	            Modules selectedModule = moduleComboBox.getSelectionModel().getSelectedItem();
-
-	            if (selectedModule != null) {
 	                try {
 	                	studentList = (IStudentList) Naming.lookup("rmi://127.0.0.1:1101/student_list");
-	                    System.out.println("Enroll prof");
-	                    EnumSet<Modules> modules = EnumSet.of(selectedModule);
+	                    System.out.println("Enroll student");
 	                    student = studentList.addStudent(studentName);
 	                    System.out.println("Student " + student.getName());
 	                } catch (MalformedURLException ee) {
@@ -80,10 +76,12 @@ public class Main extends Application {
 	                } catch (Exception ee) {
 	                    ee.printStackTrace();
 	                }
-	            } else {
-	                // Handle the case where no module is selected
-	                label.setText("Please select a module.");
-	            }
+	                WelcomePage welcomePage = new WelcomePage(student);
+	                Scene welcomeScene = new Scene(welcomePage, 1000, 600);
+	                welcomeScene.getStylesheets().add(getClass().getResource("styles.css").toExternalForm());
+
+	                // Set the new scene for the primary stage
+	                primaryStage.setScene(welcomeScene);
 	        });
 	        submitButton.getStyleClass().add("button");
 
@@ -94,8 +92,6 @@ public class Main extends Application {
 	        Tutorbox.getChildren().addAll(tutorLabel, studentNameTextField);
 	        VBox Familybox = new VBox(5);
 	        Familybox.getChildren().addAll(familyLabel, familyTextField);
-	        VBox Modulebox = new VBox(10);
-	        Modulebox.getChildren().addAll(ModuleLabel,moduleComboBox);
 	        HBox Buttonbox = new HBox(10);
 	        Buttonbox.setAlignment(Pos.BASELINE_RIGHT);
 	        Buttonbox.getChildren().addAll(submitButton);
@@ -116,7 +112,7 @@ public class Main extends Application {
 	        // Create a VBox layout for the form
 	        VBox formVBox = new VBox(20);
 	        formVBox.setAlignment(Pos.CENTER_LEFT);
-	        formVBox.getChildren().addAll(titlebox,Tutorbox, Familybox, Modulebox, Buttonbox, label);
+	        formVBox.getChildren().addAll(titlebox,Tutorbox, Familybox, Buttonbox, label);
 	        formVBox.setPadding(new Insets(10, 20, 10, 20));
 	        
 

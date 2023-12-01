@@ -7,11 +7,16 @@ import java.time.LocalTime;
 import java.util.Optional;
 
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.SplitPane;
@@ -25,7 +30,7 @@ import javafx.scene.layout.VBox;
 public class WelcomePage extends VBox {
 
     private Label welcomeLabel;
-
+    VBox sessions = new VBox(10);
     public WelcomePage(IProfessor professor) {
         initializeUI(professor);
     }
@@ -47,7 +52,7 @@ public class WelcomePage extends VBox {
         imageVBox.setAlignment(Pos.CENTER_RIGHT);
         imageVBox.getStyleClass().add("avatar");
 
-        VBox sessions = new VBox(10);
+        
         sessions.setAlignment(Pos.TOP_CENTER);
         Label professorNameLabel = new Label("Professor: ");
         try {
@@ -82,26 +87,71 @@ public class WelcomePage extends VBox {
                     
                     sessionBox.setVgrow(redBox, Priority.ALWAYS);
                     Region moduleColor= new Region();
-                    moduleColor.getStyleClass().add("moduleColor");
+                    //moduleColor.getStyleClass().add("moduleColor");
+                    try {
+                        Modules module = session.getModule();
+                        if (module != null) {
+                            switch (module) {
+                                case Mathemathics:
+                                    moduleColor.getStyleClass().add("moduleColorMath");
+                                    break;
+                                case Algorithmic:
+                                    moduleColor.getStyleClass().add("moduleColorAlgo");
+                                    break;
+                                case Physics:
+                                    moduleColor.getStyleClass().add("moduleColorPhys");
+                                    break;
+                                // Add more cases for other modules if needed
+                                default:
+                                    // Use a default background if module is not recognized
+                                    moduleColor.getStyleClass().add("moduleColorDefault");
+                            }
+                        } else {
+                            // Use a default background if module is null
+                            moduleColor.getStyleClass().add("moduleColorDefault");
+                        }
+                        } catch (Exception e) {
+                            // Handle the RemoteException as needed
+                            e.printStackTrace(); // You may want to log or handle this exception appropriately
+                        }
+                       // moduleColor.getStyleClass().add("moduleColor");
                     
                    // moduleColor.setStyle( "-fx-background-image: url('assets/photos/Math.png');");
                     HBox sessionInfo = new HBox();
                     sessionInfo.setAlignment(Pos.CENTER);
                     sessionInfo.getStyleClass().add("sessionInfo");
-                    Label sessionLabel = new Label("Session");
-                    Label sessionParticipants = new Label("20");
-                    Region spacer = new Region();
-                    HBox.setHgrow(spacer, Priority.ALWAYS);
-                    
-                    sessionInfo.getChildren().addAll(sessionLabel,spacer,sessionParticipants);
+                    Label sessionLabel;
+                    Label sessionParticipants;
+                   
+
+                    // Additional UI elements for session details
                     HBox sessionInfo2 = new HBox();
                     sessionInfo2.setAlignment(Pos.CENTER);
                     sessionInfo2.getStyleClass().add("sessionInfo");
-                    Label sessionTime = new Label("20-10-2023");
-                    Label sessionPrice = new Label("20$");
+                    
+                    Label sessionTime;
+                    Label sessionPrice;
+
+                    try {
+                    	 sessionTime = new Label(session.getDate().toString());
+                        sessionPrice = new Label(session.getPrice() + "$");
+                        sessionLabel = new Label(session.getModule().toString());
+                        sessionParticipants = new Label(session.getCapacity()+ "");
+                    } catch (Exception e) {
+                        // Handle the exception as needed
+                        e.printStackTrace();
+                        sessionLabel = new Label("Module Unavailable");
+                        sessionParticipants = new Label("Capacity Unavailable");
+                        sessionPrice = new Label("Price Unavailable");
+                        sessionTime = new Label("Date Unavailable");
+                    }
+                    Region spacer = new Region();
+                    HBox.setHgrow(spacer, Priority.ALWAYS);
+
+                    sessionInfo.getChildren().addAll(sessionLabel, spacer, sessionParticipants);
                     Region spacer2 = new Region();
                     HBox.setHgrow(spacer2, Priority.ALWAYS);
-                    sessionInfo2.getChildren().addAll(sessionTime,spacer2,sessionPrice);
+                    sessionInfo2.getChildren().addAll(sessionTime, spacer2, sessionPrice);
                    
                     
                    // Label sessionLabel2 = new Label("Session2: ");
@@ -130,40 +180,87 @@ public class WelcomePage extends VBox {
                         grid.setVgap(10);
                         grid.setPadding(new Insets(20, 150, 10, 10));
 
-                        // Add form elements to the grid (adjust as needed)
-                        TextField moduleField = new TextField();
-                        TextField levelField = new TextField();
-                        // Add more fields as needed...
+                        
+                        ObservableList<Modules> modulesList = FXCollections.observableArrayList(Modules.values()); 
+                        ComboBox<Modules> moduleComboBox = new ComboBox<>(modulesList);
+                        moduleComboBox.setPromptText("Select Module");
+                        moduleComboBox.getStyleClass().add("combo-box");
+                        
+                        ObservableList<Level> levelsList = FXCollections.observableArrayList(Level.values()); 
+                        ComboBox<Level> levelsListBox = new ComboBox<>(levelsList);
+                        levelsListBox.setPromptText("Select Level");
+                        levelsListBox.getStyleClass().add("combo-box");
+                        
+                        TextField numberField = new TextField();
+                        numberField.setPromptText("Enter Capacity");
+                        
+                        TextField priceField = new TextField();
+                        priceField.setPromptText("Enter rate");
+
+                        DatePicker dateInput = new DatePicker();
+                        dateInput.setPromptText("Select Date");
+                        
+                        ComboBox<Integer> hourComboBox = new ComboBox<>(FXCollections.observableArrayList(9, 10, 11, 14, 15,16,17));
+                        hourComboBox.setPromptText("Select Hour");
+
+                        ComboBox<Integer> minuteComboBox = new ComboBox<>(FXCollections.observableArrayList(0, 15, 30, 45));
+                        minuteComboBox.setPromptText("Select Minute");
+                        
+                        CheckBox eurCheckBox = new CheckBox("EUR");
+                        CheckBox dollarCheckBox = new CheckBox("DOLLAR");
+
 
                         grid.add(new Label("Module:"), 0, 0);
-                        grid.add(moduleField, 1, 0);
+                        grid.add(moduleComboBox, 1, 0); // Replace moduleField with moduleComboBox
                         grid.add(new Label("Level:"), 0, 1);
-                        grid.add(levelField, 1, 1);
+                        grid.add(levelsListBox, 1, 1);
+                        grid.add(new Label("Capacity:"), 0, 2);
+                        grid.add(numberField, 1, 2);
+                        grid.add(new Label("Date:"), 0, 3);
+                        grid.add(dateInput, 1, 3);
+                        grid.add(new Label("Time:"), 0, 4);
+                        grid.add(hourComboBox, 1, 4);
+                        grid.add(minuteComboBox, 2, 4);
+                        grid.add(new Label("¨Price:"), 0, 5);
+                        grid.add(priceField, 1, 5);
+                        grid.add(new Label("Currency:"), 0, 6);
+                        grid.add(eurCheckBox, 1, 6);
+                        grid.add(dollarCheckBox, 2, 6);
+                       
+
                         
                         addSessionDialog.getDialogPane().setContent(grid);
 
                         // Request focus on the first field by default
-                        Platform.runLater(moduleField::requestFocus);
+                        Platform.runLater(moduleComboBox::requestFocus);
                         addSessionDialog.setResultConverter(dialogButton -> {
                         	try {
                             if (dialogButton == addButtonType) {
-                                String module = moduleField.getText();
-                                String level = levelField.getText();
-                                /*boolean sessionCreated = professor.createSession(Modules.valueOf(module),Level.valueOf(level),1,LocalTime.of(9, 0),LocalTime.of(9, 0),LocalDate.of(2023, 12, 1),20,Currency.EUR);
-
-                                if (sessionCreated) {
-                                    System.out.println("Session Created");
-                                    // or notify the user that the session was added successfully
-                                } else {
-                                    System.out.println("Session Error");
-                                }*/
-                                boolean sessionCreated = professor.createSession(Modules.Algorithmic,Level.BEGINNER,1,LocalTime.of(9, 0),LocalTime.of(9, 0),LocalDate.of(2023, 12, 1),20,Currency.EUR);
+                            	Modules selectedModule = moduleComboBox.getSelectionModel().getSelectedItem();
+                            	Level selectedlevel = levelsListBox.getSelectionModel().getSelectedItem();
+                            	 int enteredNumber = Integer.parseInt(numberField.getText());
+                                 LocalDate selectedDate = dateInput.getValue();
+                                 int selectedHour = hourComboBox.getSelectionModel().getSelectedItem();
+                                 int selectedMinute = minuteComboBox.getSelectionModel().getSelectedItem();
+                                 int enteredPRICE = Integer.parseInt(priceField.getText());
+                                 
+                                 Currency selectedCurrency = null;
+                                 if (eurCheckBox.isSelected()) {
+                                     selectedCurrency = Currency.EUR;
+                                 } else if (dollarCheckBox.isSelected()) {
+                                     selectedCurrency = Currency.DOLLAR;
+                                 }
+                                
+                                boolean sessionCreated = professor.createSession(selectedModule,selectedlevel,enteredNumber,LocalTime.of(selectedHour, selectedMinute),
+                                        LocalTime.of(selectedHour, selectedMinute),selectedDate,enteredPRICE,selectedCurrency);
                           	  if (sessionCreated) {
-                          		  System.out.println("Session Created");
+                          		 System.out.println("Session Created for Module: " + selectedCurrency + " Level "+selectedlevel + " DATA / " + selectedDate + " Capacity " + enteredNumber);
                                     // or notify the user that the session was added successfully
+                          		updateSessionDisplay(professor);
                                 } else {
                               	  System.out.println("Session Error");
                                 }
+                          	  
 
                                 return sessionCreated;
                             }
@@ -276,6 +373,122 @@ public class WelcomePage extends VBox {
         // Apply selected style to the specified menu item
         menuItem.getStyleClass().add("selected");
     }
+    public void updateSessionDisplay(IProfessor professor) {
+        try {
+            // Clear existing sessions
+            sessions.getChildren().clear();
+
+            if (professor.getSessions() != null && !professor.getSessions().isEmpty()) {
+                // Display sessions
+                int sessionsPerRow = 3;
+                int sessionCount = 0;
+
+                HBox currentRow = null;
+
+                for (ISession session : professor.getSessions()) {
+                    if (sessionCount % sessionsPerRow == 0) {
+                        // Start a new row
+                        currentRow = new HBox(10); // Adjust spacing as needed
+                        sessions.getChildren().add(currentRow);
+                    }
+                    
+                    // Create and add UI elements for the session
+                    VBox sessionBox = createSessionBox(session);
+                    currentRow.getChildren().add(sessionBox);
+
+                    sessionCount++;
+                }
+                // ... (existing logic for displaying add session option)
+            } else {
+                // ... (existing logic for displaying no sessions and add session option)
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    private VBox createSessionBox(ISession session) {
+        VBox sessionBox = new VBox();
+
+        VBox redBox = new VBox();
+        redBox.getStyleClass().add("sessionCard");
+
+        sessionBox.setVgrow(redBox, Priority.ALWAYS);
+        Region moduleColor = new Region();
+        try {
+        Modules module = session.getModule();
+        if (module != null) {
+            switch (module) {
+                case Mathemathics:
+                    moduleColor.getStyleClass().add("moduleColorMath");
+                    break;
+                case Algorithmic:
+                    moduleColor.getStyleClass().add("moduleColorAlgo");
+                    break;
+                case Physics:
+                    moduleColor.getStyleClass().add("moduleColorPhys");
+                    break;
+
+                // Add more cases for other modules if needed
+                default:
+                    // Use a default background if module is not recognized
+                    moduleColor.getStyleClass().add("moduleColorDefault");
+            }
+        } else {
+            // Use a default background if module is null
+            moduleColor.getStyleClass().add("moduleColorDefault");
+        }
+        } catch (Exception e) {
+            // Handle the RemoteException as needed
+            e.printStackTrace(); // You may want to log or handle this exception appropriately
+        }
+       // moduleColor.getStyleClass().add("moduleColor");
+
+        HBox sessionInfo = new HBox();
+        sessionInfo.setAlignment(Pos.CENTER);
+        sessionInfo.getStyleClass().add("sessionInfo");
+        Label sessionLabel;
+        Label sessionParticipants;
+       
+
+        // Additional UI elements for session details
+        HBox sessionInfo2 = new HBox();
+        sessionInfo2.setAlignment(Pos.CENTER);
+        sessionInfo2.getStyleClass().add("sessionInfo");
+        
+        Label sessionTime;
+        Label sessionPrice;
+
+        try {
+        	 sessionTime = new Label(session.getDate().toString());
+            sessionPrice = new Label(session.getPrice() + "$");
+            sessionLabel = new Label(session.getModule().toString());
+            sessionParticipants = new Label(session.getCapacity()+ "");
+        } catch (Exception e) {
+            // Handle the exception as needed
+            e.printStackTrace();
+            sessionLabel = new Label("Module Unavailable");
+            sessionParticipants = new Label("Capacity Unavailable");
+            sessionPrice = new Label("Price Unavailable");
+            sessionTime = new Label("Date Unavailable");
+        }
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+
+        sessionInfo.getChildren().addAll(sessionLabel, spacer, sessionParticipants);
+        Region spacer2 = new Region();
+        HBox.setHgrow(spacer2, Priority.ALWAYS);
+        sessionInfo2.getChildren().addAll(sessionTime, spacer2, sessionPrice);
+
+        // Add more UI elements as needed
+
+        redBox.getChildren().addAll(moduleColor, sessionInfo, sessionInfo2);
+        sessionBox.getChildren().addAll(redBox);
+        
+        
+
+        return sessionBox;
+    }
+
 
 
 }

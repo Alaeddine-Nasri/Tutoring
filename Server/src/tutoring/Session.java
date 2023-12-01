@@ -18,8 +18,8 @@ public class Session extends UnicastRemoteObject implements ISession{
 	LocalDate date;
 	double price;
 	Currency currency;
-	List<Student> students = new ArrayList<>();
-	List<Student> waitList = new ArrayList<>();
+	List<IStudent> students = new ArrayList<>();
+	List<IStudent> waitList = new ArrayList<>();
 
 	
 	protected Session(Modules module, Level level, int capacity, LocalTime startTime, LocalTime endTime,LocalDate date, double price, Currency currency) throws RemoteException {
@@ -79,23 +79,28 @@ public class Session extends UnicastRemoteObject implements ISession{
 	public String addStudent(IStudent student) throws RemoteException {
 		try {
 			if(this.students.size() < this.capacity) {
-				boolean ack = this.students.add((Student) student);
+				//System.out.println("Can Join : " + capacity + "Student "+ student.getName());
+				boolean ack = this.students.add(student);
 				if (ack) return "You have been successfully enrolled";
 			} else {
-				boolean ack = this.waitList.add((Student) student);
+				System.out.println("Wait list : " + capacity + "Student "+ student.getName());
+				boolean ack = this.waitList.add(student);
 				if (ack) return "You have been successfully added to the wait list. Your rank is " + this.waitList.size() + ".";
 			}
 			return "There has been some error";
-		} catch (Exception e) {
+		}catch (Exception e) {
 			e.printStackTrace();
 			return "There has been some error";		
 		}
-	}	
+	}
+
+
+
 	
 	public String deleteRegistredStudent(IStudent student) throws RemoteException {
 		boolean ack = this.students.remove(student);
 		if (ack) {
-			Student firstWaitList = this.waitList.get(0);
+			IStudent firstWaitList = this.waitList.get(0);
 			firstWaitList.notifyStudent(this);
 			this.waitList.remove(0);
 			return "You have successfully unregistred for the session.";

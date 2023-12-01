@@ -5,6 +5,7 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
+import java.util.UUID;
 
 public class StudentList extends UnicastRemoteObject implements IStudentList{
 
@@ -22,5 +23,13 @@ public class StudentList extends UnicastRemoteObject implements IStudentList{
 		this.database.add(student);
 		return student;
 	}
+	/*public Student findStudentId(UUID id) throws RemoteException {
+		for(Student stud : database) {
+			if(stud.getUUID() == id) {
+				return stud;
+		    }
+		}
+		return null;
+	}*/
 
 }

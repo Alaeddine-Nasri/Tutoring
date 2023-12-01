@@ -46,21 +46,35 @@
     -fx-pref-height: 40;
     -fx-background-color: white;
     -fx-background-insets: 0;
-    -fx-padding: 0.25em 0.25em 0.25em 0.25em; /* Adjust padding to match the default */
+    -fx-padding: 0.25em 0.25em 0.25em 0.25em;
     -fx-text-box-border: transparent;
     -fx-text-box-border-width: 1;
     -fx-text-box-border-color: #041444;
     -fx-highlight-fill: -fx-control-inner-background;
     -fx-highlight-text-fill: -fx-text-inner-color;
 }
-
-/* Define styles for buttons */
 .button {
-    -fx-background-color: #041444; /* Green */
+    -fx-background-color: #041444; 
     -fx-text-fill: white;
     -fx-font-size: 14px;
     -fx-pref-width: 200;
     -fx-pref-height: 40;
+    -fx-font-weight: bold;
+}
+.button-join {
+    -fx-background-color: #041444;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-pref-width: 80;
+    -fx-pref-height: 30;
+    -fx-font-weight: bold;
+}
+.button-unjoin	 {
+    -fx-background-color: red;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-pref-width: 80;
+    -fx-pref-height: 30;
     -fx-font-weight: bold;
 }
 /* Define styles for ComboBox */
@@ -117,13 +131,47 @@
 	-fx-background-radius: 10 10 10 10;
 	-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 10, 0, 0, 0);
 }
+.sessionCardStudent{
+	-fx-background-color: white;
+	-fx-pref-width: 250;
+	-fx-pref-height: 200;
+	-fx-background-radius: 10 10 10 10;
+	-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 10, 0, 0, 0);
+}
+.sessionCardStudent:hover{
+	-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 20, 0, 0, 0);
+}
 .sessionCard:hover{
 	-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 20, 0, 0, 0);
 }
-.moduleColor{
-	-fx-background-image: url('assets/photos/Math.png');
-   /*  -fx-background-color: #FFF000;*/
-    /* Preserve the aspect ratio of the background image */
+.moduleColorDefault{
+     -fx-background-color:  #041444;
+	-fx-pref-width: 250;
+	-fx-pref-height: 110;
+	-fx-background-radius: 10 10 0 0;
+}
+.moduleColorMath {
+    -fx-background-image: url('assets/photos/Math.png');
+      -fx-background-size: cover;
+    -fx-background-position: center;
+	-fx-pref-width: 250;
+	-fx-pref-height: 110;
+	-fx-background-radius: 10 10 0 0;
+    /* Other styling properties */
+}
+
+.moduleColorAlgo {
+    -fx-background-image: url('assets/photos/Algo.png');
+    /* Other styling properties */
+      -fx-background-size: cover;
+    -fx-background-position: center;
+	-fx-pref-width: 250;
+	-fx-pref-height: 110;
+	-fx-background-radius: 10 10 0 0;
+}
+.moduleColorPhys {
+    -fx-background-image: url('assets/photos/Phys.png');
+    /* Other styling properties */
       -fx-background-size: cover;
     -fx-background-position: center;
 	-fx-pref-width: 250;
@@ -131,6 +179,9 @@
 	-fx-background-radius: 10 10 0 0;
 }
 .sessionInfo{
+	-fx-padding: 5 5 5 5;
+}
+.sessionJoin{
 	-fx-padding: 5 5 5 5;
 }
 .addSessionCard{
